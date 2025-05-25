@@ -14,17 +14,17 @@
 - Volume mounts for persistent data (wp-content, database)
 
 ## Development Workflow
-- Set instance number before starting (determines ports)
-- Access WordPress via http://localhost:809X (where X = instance number)
-- Access VS Code via http://localhost:808X
-- Use Claude Code within VS Code container for AI assistance
-- Install MCP servers: Bright Data, Context 7 for enhanced capabilities
+- Run `./scripts/setup.sh` to initialize WordPress environment
+- Access WordPress installation at http://localhost:8090/wp-admin/install.php
+- Use Browser MCP for automated WordPress setup and configuration
+- Develop themes/plugins with Claude Code and Cursor IDE
+- Test browser automation workflows for demo site creation
 
 ## WordPress Specific
 - WordPress core files mounted as volumes for persistence
 - Custom themes/plugins in wp-content directory
 - Database persistence through named Docker volumes
-- Admin credentials stored in environment variables
+- Admin credentials: admin / D@wordpresska79823!4 (endersclarity@gmail.com)
 
 ## Security Notes
 - This setup is for development/demo purposes only
@@ -32,7 +32,13 @@
 - No SSL/HTTPS configured (local development only)
 - Default MySQL credentials (change for any shared environments)
 
-## Multi-Instance Management
-- Each instance uses unique ports: 8090+N for WordPress, 8080+N for VS Code
-- Separate Docker networks per instance to avoid conflicts
+## Browser Automation
+- Browser MCP enables automated WordPress installation and configuration
+- Automated theme/plugin development and testing workflows
+- Screenshot capture and validation for demo site creation
+- AI-assisted browser navigation and form completion
+
+## Multi-Instance Management (Future)
+- Plan for multiple WordPress instances on different ports (8090+N)
 - Instance-specific volume names for data isolation
+- Automated instance creation and management scripts

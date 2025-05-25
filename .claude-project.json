@@ -1,52 +1,53 @@
 {
   "project_name": "docker-wordpress",
   "project_type": "containerized-wordpress-development",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "created": "2024-12-28",
-  "description": "Docker-based WordPress development environment with Claude Code integration",
+  "updated": "2025-01-25",
+  "description": "Docker-based WordPress development environment with Claude Code and Browser MCP integration",
   
   "key_files": {
-    "docker-compose.yml": "Main container orchestration configuration",
+    "docker-compose.yml": "Container orchestration for WordPress and MySQL",
     "CLAUDE.md": "Claude Code integration and development guidelines", 
-    "README.md": "Project setup and usage instructions",
-    "scripts/setup.sh": "Environment initialization script",
-    ".env.template": "Environment variables template"
+    "scripts/setup.sh": "Automated environment initialization script",
+    "wp-content/": "WordPress themes, plugins, and uploads directory"
   },
   
   "modules": {
-    "docker-setup": "memory-bank/docker_setup_module.md",
+    "docker-infrastructure": "memory-bank/docker_infrastructure_module.md",
+    "browser-automation": "memory-bank/browser_automation_module.md",
+    "wordpress-development": "memory-bank/wordpress_development_module.md",
     "claude-integration": "memory-bank/claude_integration_module.md",
-    "wordpress-config": "memory-bank/wordpress_config_module.md",
-    "multi-instance": "memory-bank/multi_instance_module.md",
-    "development-workflow": "memory-bank/development_workflow_module.md"
+    "multi-instance": "memory-bank/multi_instance_module.md"
   },
   
   "implementation_plans": {
-    "docker-setup": "memory-bank/implementation_plan_docker_setup.md",
-    "claude-setup": "memory-bank/implementation_plan_claude_setup.md"
+    "wordpress-automation": "memory-bank/implementation_plan_wordpress_automation.md",
+    "theme-development": "memory-bank/implementation_plan_theme_development.md",
+    "multi-instance": "memory-bank/implementation_plan_multi_instance.md"
   },
   
   "tasks": {
-    "docker-compose": "memory-bank/task_docker_compose.md",
-    "setup-scripts": "memory-bank/task_setup_scripts.md",
-    "volume-config": "memory-bank/task_volume_config.md",
-    "network-config": "memory-bank/task_network_config.md"
+    "browser-mcp-test": "memory-bank/task_browser_mcp_test.md",
+    "wordpress-install-automation": "memory-bank/task_wordpress_install_automation.md",
+    "admin-config-automation": "memory-bank/task_admin_config_automation.md",
+    "content-generation": "memory-bank/task_content_generation.md"
   },
   
-  "roadmap": "memory-bank/project_roadmap.md",
   "system_manifest": "memory-bank/system_manifest.md",
+  "roadmap": "memory-bank/project_roadmap.md",
   
   "development_commands": {
     "start": "docker-compose up -d",
     "stop": "docker-compose down", 
     "logs": "docker-compose logs -f",
     "shell": "docker-compose exec wordpress bash",
-    "setup": "./scripts/setup.sh"
+    "setup": "./scripts/setup.sh",
+    "status": "docker-compose ps"
   },
   
   "ports": {
     "wordpress_base": 8090,
-    "vscode_base": 8080,
     "mysql_base": 3306
   },
   
@@ -55,25 +56,48 @@
     "Docker Compose", 
     "WordPress",
     "MySQL",
-    "VS Code Server",
+    "Cursor IDE",
     "Claude Code",
+    "Browser MCP",
     "MCP Servers"
   ],
   
+  "mcp_servers": {
+    "browsermcp": "npx @browsermcp/mcp",
+    "desktop-commander": "npx @wonderwhy-er/desktop-commander@latest",
+    "sequential-thinking": "npx @modelcontextprotocol/server-sequential-thinking",
+    "exa": "npx -y exa-mcp-server",
+    "youtube-transcript": "npx @kimtaeyoon83/mcp-server-youtube-transcript"
+  },
+  
+  "load_sequence": [
+    "/home/ender/.claude/CLAUDE.md",
+    "./CLAUDE.md",
+    "memory-bank/system_manifest.md",
+    "activeContext.md",
+    "memory-bank/project_roadmap.md",
+    "memory-bank/docker_infrastructure_module.md",
+    "memory-bank/browser_automation_module.md",
+    "memory-bank/wordpress_development_module.md"
+  ],
+  
   "metadata": {
-    "last_sync": "2024-12-28T00:00:00Z",
+    "last_architect": "2025-01-25T19:45:00Z",
+    "last_load": "2025-01-25T00:00:00Z",
+    "last_sync": "2025-01-25T19:35:00Z",
     "session_accomplishments": [
-      "Project analysis and research",
-      "HDTA structure scaffolding", 
-      "MCP server integration",
-      "Context documentation"
+      "WordPress deployment successful at localhost:8090",
+      "Docker containers operational (WordPress + MySQL)",
+      "BrowserMCP server installed and configured",
+      "Complete HDTA structure regenerated with current state",
+      "Project architecture updated for browser automation focus"
     ],
-    "current_phase": "Initial Setup & Scaffolding",
+    "current_phase": "Browser MCP Testing & WordPress Automation",
     "next_priorities": [
-      "Docker Compose implementation",
-      "Setup script creation",
-      "Volume configuration",
-      "End-to-end testing"
+      "Test BrowserMCP integration with WordPress admin",
+      "Automate WordPress installation workflow",
+      "Develop theme creation automation",
+      "Implement multi-instance support"
     ]
   },
   
@@ -81,6 +105,16 @@
     "active_context": "activeContext.md",
     "changelog": "changelog.md", 
     "progress_tracker": "memory-bank/project_roadmap.md",
-    "git_status": "tracked"
+    "system_manifest": "memory-bank/system_manifest.md"
+  },
+  
+  "file_mappings": {
+    "activeContext.md": "Current project state and session tracking",
+    "changelog.md": "Complete log of changes and decisions",
+    "CLAUDE.md": "Project-specific development guidelines",
+    "memory-bank/system_manifest.md": "System architecture overview",
+    "memory-bank/project_roadmap.md": "Project phases and milestones",
+    "docker-compose.yml": "Container orchestration configuration",
+    "scripts/setup.sh": "Environment initialization automation"
   }
 }
