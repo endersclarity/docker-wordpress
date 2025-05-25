@@ -1,35 +1,35 @@
 # System: Docker WordPress Development Environment
 
 ## Purpose
-Containerized WordPress development system with Claude Code integration for rapid prototyping, demo creation, and portfolio projects.
+Containerized WordPress development system with Claude Code integration for rapid prototyping, demo creation, and portfolio projects. Enables browser automation testing and multi-instance deployment.
 
 ## Architecture
 ```
-[Docker Host] <-> [Multiple WP Instances] <-> [VS Code Browser] <-> [Claude Code]
+[Docker Host] <-> [WordPress Containers] <-> [Browser MCP] <-> [Claude Code]
      |                    |                        |                    |
      |                    |                        |                    +-- [MCP Servers]
-     |                    |                        +-- [Web Interface]
+     |                    |                        +-- [Web Automation]
      |                    +-- [WP Instance 1 (Port 8090)]
      |                    +-- [WP Instance 2 (Port 8091)]
      |                    +-- [WP Instance N (Port 809N)]
      +-- [Docker Compose]
      +-- [Volume Management]
-     +-- [Network Configuration]
+     +-- [MySQL Database]
 ```
 
 ## Module Registry
-- [docker-setup (`memory-bank/docker_setup_module.md`)]: Docker container configuration and management
-- [wordpress-config (`memory-bank/wordpress_config_module.md`)]: WordPress installation and configuration
-- [claude-integration (`memory-bank/claude_integration_module.md`)]: Claude Code setup and MCP integration
-- [multi-instance (`memory-bank/multi_instance_module.md`)]: Multiple site management system
-- [development-workflow (`memory-bank/development_workflow_module.md`)]: Development and demo workflow
+- [docker-infrastructure (`memory-bank/docker_infrastructure_module.md`)]: Container orchestration and management
+- [wordpress-development (`memory-bank/wordpress_development_module.md`)]: WordPress setup and theme/plugin development
+- [browser-automation (`memory-bank/browser_automation_module.md`)]: Browser MCP integration and web automation
+- [multi-instance (`memory-bank/multi_instance_module.md`)]: Multiple site management and port allocation
+- [claude-integration (`memory-bank/claude_integration_module.md`)]: Claude Code setup and MCP server integration
 
 ## Development Workflow
-1. Clone repository and set instance number
-2. Run Docker setup script
-3. Configure WordPress through web interface
-4. Access VS Code through browser
-5. Initialize Claude Code with MCPs
-6. Begin development with AI assistance
+1. Run setup script to initialize WordPress containers
+2. Access WordPress installation at localhost:8090
+3. Use Browser MCP to automate WordPress configuration
+4. Develop themes/plugins with Claude Code assistance
+5. Test browser automation workflows
+6. Deploy additional instances as needed
 
-## Version: 1.0 | Status: Development
+## Version: 1.1 | Status: Active Development
