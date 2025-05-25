@@ -1,0 +1,86 @@
+{
+  "project_name": "docker-wordpress",
+  "project_type": "containerized-wordpress-development",
+  "version": "1.0.0",
+  "created": "2024-12-28",
+  "description": "Docker-based WordPress development environment with Claude Code integration",
+  
+  "key_files": {
+    "docker-compose.yml": "Main container orchestration configuration",
+    "CLAUDE.md": "Claude Code integration and development guidelines", 
+    "README.md": "Project setup and usage instructions",
+    "scripts/setup.sh": "Environment initialization script",
+    ".env.template": "Environment variables template"
+  },
+  
+  "modules": {
+    "docker-setup": "memory-bank/docker_setup_module.md",
+    "claude-integration": "memory-bank/claude_integration_module.md",
+    "wordpress-config": "memory-bank/wordpress_config_module.md",
+    "multi-instance": "memory-bank/multi_instance_module.md",
+    "development-workflow": "memory-bank/development_workflow_module.md"
+  },
+  
+  "implementation_plans": {
+    "docker-setup": "memory-bank/implementation_plan_docker_setup.md",
+    "claude-setup": "memory-bank/implementation_plan_claude_setup.md"
+  },
+  
+  "tasks": {
+    "docker-compose": "memory-bank/task_docker_compose.md",
+    "setup-scripts": "memory-bank/task_setup_scripts.md",
+    "volume-config": "memory-bank/task_volume_config.md",
+    "network-config": "memory-bank/task_network_config.md"
+  },
+  
+  "roadmap": "memory-bank/project_roadmap.md",
+  "system_manifest": "memory-bank/system_manifest.md",
+  
+  "development_commands": {
+    "start": "docker-compose up -d",
+    "stop": "docker-compose down", 
+    "logs": "docker-compose logs -f",
+    "shell": "docker-compose exec wordpress bash",
+    "setup": "./scripts/setup.sh"
+  },
+  
+  "ports": {
+    "wordpress_base": 8090,
+    "vscode_base": 8080,
+    "mysql_base": 3306
+  },
+  
+  "technologies": [
+    "Docker",
+    "Docker Compose", 
+    "WordPress",
+    "MySQL",
+    "VS Code Server",
+    "Claude Code",
+    "MCP Servers"
+  ],
+  
+  "metadata": {
+    "last_sync": "2024-12-28T00:00:00Z",
+    "session_accomplishments": [
+      "Project analysis and research",
+      "HDTA structure scaffolding", 
+      "MCP server integration",
+      "Context documentation"
+    ],
+    "current_phase": "Initial Setup & Scaffolding",
+    "next_priorities": [
+      "Docker Compose implementation",
+      "Setup script creation",
+      "Volume configuration",
+      "End-to-end testing"
+    ]
+  },
+  
+  "sync_targets": {
+    "active_context": "activeContext.md",
+    "changelog": "changelog.md", 
+    "progress_tracker": "memory-bank/project_roadmap.md",
+    "git_status": "tracked"
+  }
+}
