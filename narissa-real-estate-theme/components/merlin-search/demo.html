@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧙‍♂️ Merlin's Shack Search - Demo</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            font-family: 'Georgia', serif;
+        }
+        
+        h1 {
+            text-align: center;
+            color: white;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #FFD700;
+            font-style: italic;
+            margin-bottom: 40px;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧙‍♂️ Merlin's Shack Property Search</h1>
+    <p class="subtitle">Find your magical home in Nevada County</p>
+    
+    <!-- Include the cottage search component -->
+    <div class="merlin-search-container">
+      <div class="cottage-frame">
+        <div class="search-input-wrapper">
+          <input type="text" id="merlin-search" placeholder="What kind of magical home are you seeking? (try 'hobbit house' or 'luxury castle')" />
+          <button type="submit" class="magic-search-btn">🔮 Find Magic</button>
+        </div>
+      </div>
+      
+      <div class="search-results" id="search-results">
+        <!-- Search results will populate here -->
+      </div>
+    </div>
+
+    <!-- Load styling and functionality -->
+    <link rel="stylesheet" href="cottage-search.css">
+    <script src="cottage-search.js"></script>
+</body>
+</html>
