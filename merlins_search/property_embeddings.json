@@ -1,0 +1,9 @@
+{
+  "listings": [],
+  "metadata": {
+    "total_properties": 458,
+    "embedding_model": "text-embedding-ada-002",
+    "created_timestamp": 1748235255.1467044,
+    "embedding_dimension": null
+  }
+}
