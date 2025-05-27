@@ -10,7 +10,9 @@ class WordPressAdminLogin {
     constructor() {
         this.browser = null;
         this.page = null;
-        this.config = require('../browser-mcp-config.json');
+        const path = require('path');
+        const configPath = path.resolve(__dirname, '..', 'browser-mcp-config.json');
+        this.config = require(configPath);
     }
 
     async log(level, message, data = null) {
@@ -44,13 +46,16 @@ class WordPressAdminLogin {
         try {
             this.log('info', 'Initializing browser for admin login');
             
+            // Ensure browser config exists with defaults
+            const browserConfig = this.config.browser || {};
+            
             this.browser = await chromium.launch({
-                headless: this.config.browser.headless,
-                slowMo: this.config.browser.slowMo
+                headless: browserConfig.headless !== false,
+                slowMo: browserConfig.slowMo || 100
             });
             
             this.page = await this.browser.newPage({
-                viewport: this.config.browser.viewport
+                viewport: browserConfig.viewport || { width: 1280, height: 720 }
             });
             
             this.log('info', 'Browser initialized successfully');
@@ -125,7 +130,8 @@ class WordPressAdminLogin {
             await this.page.click('#wp-submit');
             
             // Wait for login to complete
-            await this.page.waitForTimeout(3000);
+            const browserConfig = this.config.browser || {};
+            await this.page.waitForTimeout(browserConfig.loginTimeout || 5000);
             
             const currentUrl = this.page.url();
             const title = await this.page.title();
