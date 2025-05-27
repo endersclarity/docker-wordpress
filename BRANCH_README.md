@@ -1,55 +1,49 @@
-# Branch: feature/browser-mcp-wordpress-automation
+# Branch: feature/phase-4-wordpress-mcp-integration
 
 ## Purpose
-Establish comprehensive browser automation infrastructure for WordPress development workflows using Browser MCP, creating the foundation for automated cottage search integration and streamlined development processes.
+Integrate WordPress Model Context Protocol (MCP) server to enable direct WordPress API interaction alongside existing browser automation. This creates a dual-approach system where Claude can manage WordPress through both browser automation and native REST API calls.
 
 ## Success Criteria
-- [ ] **Browser MCP Integration**: Browser MCP server installed, configured, and operational for WordPress automation
-- [ ] **Automated WordPress Setup**: Complete WordPress installation and configuration via browser automation
-- [ ] **Admin Interface Automation**: Automated navigation and interaction with WordPress admin dashboard
-- [ ] **Theme Management Automation**: Automated theme activation, configuration, and customization workflows
-- [ ] **Content Creation Workflows**: Automated creation and management of WordPress content and settings
-- [ ] **Environment Optimization**: WordPress environment optimized and prepared for cottage search integration
-- [ ] **Testing Validation**: Comprehensive test suite validates all browser automation workflows
-- [ ] **Documentation Complete**: Complete documentation of automation capabilities and integration processes
+- [ ] **WordPress MCP Server Installation**: Node.js WordPress MCP server (server-wp-mcp) installed and configured
+- [ ] **Local WordPress Integration**: MCP server successfully connected to localhost:8090 WordPress instance  
+- [ ] **Authentication Setup**: WordPress application passwords configured for secure API access
+- [ ] **Content Management Testing**: Create, read, update, delete operations for posts and pages via MCP
+- [ ] **Site Administration**: User management, plugin/theme operations through WordPress MCP
+- [ ] **Multi-MCP Configuration**: Browser MCP + WordPress MCP working together seamlessly
+- [ ] **Automation Workflows**: Combined browser automation + WordPress API for complete site management
+- [ ] **Documentation & Testing**: Comprehensive testing suite and integration documentation
 
 ## Scope & Deliverables
 
-### Browser MCP Infrastructure
-- Browser MCP server installation and configuration
-- Integration with existing Docker WordPress environment
-- Browser automation capabilities testing and validation
-- Connection to WordPress containers and services
+### Core WordPress MCP Integration
+- **WordPress MCP Server**: Install and configure server-wp-mcp for localhost:8090
+- **Application Password Setup**: Create WordPress application passwords for API authentication
+- **Multi-MCP Configuration**: Configure both Browser MCP and WordPress MCP in Claude Desktop
+- **Connection Testing**: Validate WordPress REST API connectivity and authentication
 
-### WordPress Automation Workflows
-- Automated WordPress installation and initial setup
-- Admin user creation and authentication automation
-- WordPress admin dashboard navigation and interaction
-- Settings configuration and management automation
+### Content Management Capabilities  
+- **Post Operations**: Create, read, update, delete blog posts via WordPress MCP
+- **Page Management**: Manage WordPress pages through API calls
+- **Media Handling**: Upload and manage media files through WordPress MCP
+- **Category/Tag Management**: Organize content with taxonomies via API
 
-### Theme and Content Management
-- Automated theme activation and configuration
-- WordPress customizer automation for theme settings
-- Automated content creation (pages, posts, menus)
-- Media management and upload automation
+### Site Administration Features
+- **User Management**: Create, modify, delete WordPress users through MCP
+- **Plugin Operations**: Install, activate, deactivate plugins via WordPress API
+- **Theme Management**: Switch themes and modify theme settings through MCP
+- **Site Configuration**: Modify WordPress settings and options via API
 
-### Environment Preparation
-- WordPress environment optimization for cottage search integration
-- Database configuration and optimization
-- Plugin management and activation automation
-- Security and performance configuration automation
+### Dual-Approach Automation
+- **Browser + API Workflows**: Combine browser automation with direct API calls
+- **Error Handling**: Fallback mechanisms between browser and API approaches
+- **Performance Optimization**: Choose optimal method for each operation type
+- **Workflow Documentation**: Document when to use browser vs API approaches
 
-### Testing and Validation
-- Comprehensive test suite for all automation workflows
-- Error handling and recovery testing
-- Performance testing for automation speed and reliability
-- Integration testing with existing semantic search system
-
-### Documentation and Guides
-- Complete browser automation setup documentation
-- WordPress integration process guides
-- Troubleshooting and maintenance documentation
-- Best practices for automated WordPress development
+### Testing & Documentation
+- **Unit Tests**: Test individual WordPress MCP operations
+- **Integration Tests**: Test combined browser + WordPress MCP workflows  
+- **Performance Tests**: Benchmark API vs browser automation speeds
+- **User Documentation**: Comprehensive guide for WordPress MCP usage
 
 ## Dependencies
 
