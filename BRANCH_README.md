@@ -17,7 +17,7 @@ Migrate the existing Disney cottage search UI from vanilla HTML/CSS/JavaScript t
 
 ### Phase 1: Core Component Structure
 - Create base component architecture (SearchContainer, PropertyCard, FilterPanel)
-- Set up component directory structure in Next.js project
+- Set up component directory structure for the Next.js project
 - Implement basic prop interfaces and TypeScript definitions
 - Create reusable utility components (LoadingSpinner, ErrorBoundary)
 
@@ -28,7 +28,7 @@ Migrate the existing Disney cottage search UI from vanilla HTML/CSS/JavaScript t
 - Add sparkle animations and mystical hover effects
 
 ### Phase 3: API Integration
-- Connect React components to semantic search API
+- Connect React components to the semantic search API
 - Implement SWR or React Query for data fetching
 - Add proper error handling and fallback states
 - Create API client for search and property endpoints
@@ -56,7 +56,7 @@ Migrate the existing Disney cottage search UI from vanilla HTML/CSS/JavaScript t
 - **Animations**: Framer Motion for magical transitions
 
 ### Component Architecture
-```
+```plaintext
 components/
 ├── cottage-search/
 │   ├── SearchContainer.tsx      # Main search interface
@@ -95,7 +95,7 @@ components/
 ## Migration Strategy
 
 ### Existing Assets to Port
-```
+```plaintext
 Source Files (narissa-real-estate-theme/components/merlin-search/):
 ├── cottage-search.html          → React JSX components
 ├── cottage-search.css           → Tailwind classes + styled-components
@@ -141,7 +141,7 @@ Source Files (narissa-real-estate-theme/components/merlin-search/):
 - Documentation complete with component usage guides
 
 ## Timeline
-- **Estimated Duration**: 4-5 days
+- **Estimated Duration**: 4–5 days
 - **Phase 1** (Day 1): Core component structure and TypeScript setup
 - **Phase 2** (Day 2): Disney theme migration and styling
 - **Phase 3** (Day 3): API integration and data fetching

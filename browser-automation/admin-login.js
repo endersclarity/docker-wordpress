@@ -136,7 +136,10 @@ class WordPressAdminLogin {
             });
             
             // Check if login was successful
-            if (title.includes('Dashboard') || currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login')) {
+            if (
+                title.includes('Dashboard') ||
+                (currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login'))
+            ) {
                 await this.takeScreenshot('login-success');
                 return { success: true, loggedIn: true };
             } else {
