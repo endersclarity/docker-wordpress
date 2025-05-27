@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merlin's Cottage Search - Demo</title>
+    <link rel="stylesheet" href="cottage-search.css">
+    <style>
+        /* Demo-specific styles */
+        .demo-header {
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 15px;
+            text-align: center;
+            font-family: monospace;
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 2000;
+            font-size: 0.9rem;
+        }
+        
+        .demo-header a {
+            color: #ffd700;
+            text-decoration: none;
+            margin: 0 10px;
+        }
+        
+        .demo-header a:hover {
+            text-decoration: underline;
+        }
+        
+        body {
+            padding-top: 60px; /* Account for fixed demo header */
+        }
+        
+        .api-status {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: rgba(0,0,0,0.8);
+            color: white;
+            padding: 10px 15px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            z-index: 1500;
+            border: 2px solid #ffd700;
+        }
+        
+        .status-indicator {
+            display: inline-block;
+            width: 10px;
+            height: 10px;
+            border-radius: 50%;
+            margin-right: 8px;
+        }
+        
+        .status-connected { background-color: #4caf50; }
+        .status-fallback { background-color: #ff9800; }
+        .status-error { background-color: #f44336; }
+    </style>
+</head>
+<body>
+    <!-- Demo Navigation -->
+    <div class="demo-header">
+        🧙‍♂️ <strong>DEMO MODE</strong> | 
+        <a href="#" onclick="testSearch('Merlin\'s shack')">Test "Merlin's shack"</a> |
+        <a href="#" onclick="testSearch('luxury estate with pool')">Test "luxury estate"</a> |
+        <a href="#" onclick="testSearch('cozy cabin by creek')">Test "cozy cabin"</a> |
+        <a href="#" onclick="clearDemo()">Clear</a> |
+        <a href="#" onclick="toggleApiStatus()">API Status</a>
+    </div>
+
+    <!-- Main Cottage Search Interface -->
+    <div class="cottage-search-container">
+        <!-- Magical Header -->
+        <div class="cottage-header">
+            <div class="magic-sparkles"></div>
+            <h1 class="cottage-title">🧙‍♂️ Merlin's Cottage Search</h1>
+            <p class="cottage-subtitle">Find your magical Nevada County retreat with the power of enchanted search</p>
+            <div style="margin-top: 15px; font-size: 0.9rem; opacity: 0.8;">
+                <em>Demo Version - Testing UI Integration with Semantic Search API</em>
+            </div>
+        </div>
+
+        <!-- Search Form -->
+        <div class="search-form-wrapper">
+            <form id="cottage-search-form" class="cottage-search-form">
+                <div class="search-input-container">
+                    <input 
+                        type="text" 
+                        id="search-query" 
+                        placeholder="Describe your dream cottage... (e.g., 'cozy cabin by the creek' or 'rustic mountain retreat')"
+                        class="search-input magical-input"
+                        autocomplete="off"
+                    >
+                    <button type="submit" class="search-button magical-button">
+                        <span class="button-text">Search</span>
+                        <span class="button-icon">🔮</span>
+                    </button>
+                </div>
+
+                <!-- Advanced Filters -->
+                <div class="filters-container" id="filters-container">
+                    <div class="filter-group">
+                        <label for="property-type">Property Type</label>
+                        <select id="property-type" class="filter-select">
+                            <option value="">All Types</option>
+                            <option value="cabin">Cabin</option>
+                            <option value="cottage">Cottage</option>
+                            <option value="house">House</option>
+                            <option value="land">Land</option>
+                        </select>
+                    </div>
+
+                    <div class="filter-group">
+                        <label for="price-range">Price Range</label>
+                        <select id="price-range" class="filter-select">
+                            <option value="">Any Price</option>
+                            <option value="0-300000">Under $300k</option>
+                            <option value="300000-500000">$300k - $500k</option>
+                            <option value="500000-750000">$500k - $750k</option>
+                            <option value="750000-1000000">$750k - $1M</option>
+                            <option value="1000000+">$1M+</option>
+                        </select>
+                    </div>
+
+                    <button type="button" id="toggle-filters" class="toggle-filters">
+                        <span>Advanced Filters</span>
+                        <span class="filter-arrow">▼</span>
+                    </button>
+                </div>
+            </form>
+        </div>
+
+        <!-- Search Status -->
+        <div id="search-status" class="search-status hidden">
+            <div class="loading-spinner">
+                <div class="magical-orb"></div>
+                <span class="loading-text">Consulting the crystal ball...</span>
+            </div>
+        </div>
+
+        <!-- Search Results -->
+        <div id="search-results" class="search-results">
+            <div class="results-header hidden" id="results-header">
+                <h2 class="results-title">Enchanted Properties Found</h2>
+                <div class="results-count" id="results-count"></div>
+            </div>
+
+            <div class="results-grid" id="results-grid">
+                <!-- Dynamic search results will be inserted here -->
+            </div>
+
+            <!-- No Results State -->
+            <div class="no-results hidden" id="no-results">
+                <div class="no-results-icon">🏚️</div>
+                <h3>No Magical Properties Found</h3>
+                <p>Try a different search spell or check your magical filters</p>
+                <button class="clear-search-btn" onclick="clearSearch()">Clear Search</button>
+            </div>
+
+            <!-- Error State -->
+            <div class="error-state hidden" id="error-state">
+                <div class="error-icon">⚠️</div>
+                <h3>Magic Temporarily Unavailable</h3>
+                <p>The crystal ball is cloudy. Please try again in a moment.</p>
+                <button class="retry-search-btn" onclick="retrySearch()">Try Again</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Property Detail Modal -->
+    <div id="property-modal" class="property-modal hidden">
+        <div class="modal-overlay" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <button class="modal-close" onclick="closeModal()">×</button>
+            <div id="modal-body">
+                <!-- Property details will be loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- API Status Indicator -->
+    <div class="api-status" id="api-status">
+        <span class="status-indicator status-fallback"></span>
+        <span id="status-text">Checking API...</span>
+    </div>
+
+    <script src="cottage-search.js"></script>
+    <script>
+        // Demo-specific functions
+        function testSearch(query) {
+            document.getElementById('search-query').value = query;
+            if (window.cottageSearch) {
+                window.cottageSearch.performSearch(query);
+            }
+        }
+
+        function clearDemo() {
+            if (window.cottageSearch) {
+                window.cottageSearch.clearSearch();
+            }
+        }
+
+        function toggleApiStatus() {
+            const status = document.getElementById('api-status');
+            status.style.display = status.style.display === 'none' ? 'block' : 'none';
+        }
+
+        // Check API status on load
+        document.addEventListener('DOMContentLoaded', async () => {
+            const statusElement = document.getElementById('status-text');
+            const indicator = document.querySelector('.status-indicator');
+            
+            try {
+                // Test API connectivity
+                const response = await fetch('/merlins_search/health', { 
+                    method: 'GET',
+                    timeout: 5000 
+                });
+                
+                if (response.ok) {
+                    indicator.className = 'status-indicator status-connected';
+                    statusElement.textContent = 'API Connected';
+                } else {
+                    throw new Error('API not responding');
+                }
+            } catch (error) {
+                indicator.className = 'status-indicator status-fallback';
+                statusElement.textContent = 'Using Mock Data';
+                console.log('API not available, using fallback:', error);
+            }
+        });
+    </script>
+</body>
+</html>
