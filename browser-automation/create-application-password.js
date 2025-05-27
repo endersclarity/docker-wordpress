@@ -35,7 +35,7 @@ async function createApplicationPassword() {
         console.log('📜 Looking for Application Passwords section...');
         await page.evaluate(() => {
             const element = document.querySelector('h2');
-            if (element && element.textContent.includes('Application Passwords')) {
+            if (element?.textContent?.includes('Application Passwords')) {
                 element.scrollIntoView();
             }
         });
@@ -45,60 +45,10 @@ async function createApplicationPassword() {
         
         if (!hasAppPasswords) {
             console.log('⚠️  Application Passwords section not found. Checking for alternative method...');
-            
-            // Try alternative: look for application password fields
-            const nameField = page.locator('input[name="new_application_password_name"]');
-            if (await nameField.count() > 0) {
-                console.log('✅ Found application password creation field');
-                await nameField.fill('WordPress MCP Access');
-                await page.click('button[type="submit"]:has-text("Add New Application Password")');
-                
-                // Wait for password generation
-                await page.waitForSelector('.new-application-password code', { timeout: 5000 });
-                const appPasswordElement = page.locator('.new-application-password code, .auth-app-pass-value, code').first();
-            const appPassword = await appPasswordElement.textContent();
-                
-                console.log('🎉 Application password created:', appPassword);
-                
-                // Update config file
-                const configPath = '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
-                const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-                config.docker.PASS = appPassword;
-                fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-                
-                console.log('💾 Configuration updated with application password');
-                return appPassword;
-            } else {
-                console.log('❌ Application password functionality not available');
-                console.log('ℹ️  This WordPress installation may not support application passwords');
-                return null;
-            }
+            return await this.createPasswordViaField(page);
         } else {
             console.log('✅ Found Application Passwords section');
-            // Add application password name - try different selectors
-            const nameInput = page.locator('input[name="new_application_password_name"], #new_application_password_name');
-            await nameInput.waitFor({ timeout: 10000 });
-            await nameInput.fill('WordPress MCP Access');
-            
-            // Click the button - try different selectors
-            const addButton = page.locator('button:has-text("Add New Application Password"), #do_new_application_password, input[value*="Add New"]');
-            await addButton.click();
-            
-            // Wait for the password to be generated - try multiple selectors
-            await page.waitForSelector('.new-application-password code, .auth-app-pass-value, code', { timeout: 10000 });
-            const appPasswordElement = page.locator('.new-application-password code, .auth-app-pass-value, code').first();
-            const appPassword = await appPasswordElement.textContent();
-            
-            console.log('🎉 Application password created:', appPassword);
-            
-            // Update config file
-            const configPath = '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
-            const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
-            config.docker.PASS = appPassword;
-            fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
-            
-            console.log('💾 Configuration updated with application password');
-            return appPassword;
+            return await this.createPasswordViaSection(page);
         }
         
     } catch (error) {
@@ -108,6 +58,61 @@ async function createApplicationPassword() {
     } finally {
         await browser.close();
     }
+}
+
+async function findApplicationPasswordField(page) {
+    const nameField = page.locator('input[name="new_application_password_name"]');
+    return await nameField.count() > 0 ? nameField : null;
+}
+
+async function createPasswordViaField(page) {
+    const nameField = await findApplicationPasswordField(page);
+    if (!nameField) {
+        console.log('❌ Application password functionality not available');
+        console.log('ℹ️  This WordPress installation may not support application passwords');
+        return null;
+    }
+    
+    console.log('✅ Found application password creation field');
+    await nameField.fill('WordPress MCP Access');
+    await page.click('button[type="submit"]:has-text("Add New Application Password")');
+    
+    // Wait for password generation
+    await page.waitForSelector('.new-application-password code', { timeout: 5000 });
+    const appPasswordElement = page.locator('.new-application-password code, .auth-app-pass-value, code').first();
+    const appPassword = await appPasswordElement.textContent();
+    
+    console.log('🎉 Application password created:', appPassword);
+    return await updateConfigFile(appPassword);
+}
+
+async function createPasswordViaSection(page) {
+    // Add application password name - try different selectors
+    const nameInput = page.locator('input[name="new_application_password_name"], #new_application_password_name');
+    await nameInput.waitFor({ timeout: 10000 });
+    await nameInput.fill('WordPress MCP Access');
+    
+    // Click the button - try different selectors
+    const addButton = page.locator('button:has-text("Add New Application Password"), #do_new_application_password, input[value*="Add New"]');
+    await addButton.click();
+    
+    // Wait for the password to be generated - try multiple selectors
+    await page.waitForSelector('.new-application-password code, .auth-app-pass-value, code', { timeout: 10000 });
+    const appPasswordElement = page.locator('.new-application-password code, .auth-app-pass-value, code').first();
+    const appPassword = await appPasswordElement.textContent();
+    
+    console.log('🎉 Application password created:', appPassword);
+    return await updateConfigFile(appPassword);
+}
+
+async function updateConfigFile(appPassword) {
+    const configPath = '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
+    const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+    config.docker.PASS = appPassword;
+    fs.writeFileSync(configPath, JSON.stringify(config, null, 2));
+    
+    console.log('💾 Configuration updated with application password');
+    return appPassword;
 }
 
 if (require.main === module) {

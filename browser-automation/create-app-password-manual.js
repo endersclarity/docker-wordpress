@@ -44,13 +44,19 @@ async function openWordPressAdmin() {
         console.log('5. Press Enter in this terminal when done');
         
         // Wait for user input
-        process.stdin.setRawMode(true);
-        process.stdin.resume();
+        const readline = require('readline');
+        const rl = readline.createInterface({
+            input: process.stdin,
+            output: process.stdout
+        });
+        
         await new Promise(resolve => {
-            process.stdin.on('data', () => {
+            rl.question('Press Enter when you have completed the steps above...', () => {
                 resolve();
             });
         });
+        
+        rl.close();
         
         console.log('\n💾 Please paste the application password below:');
         process.stdin.setRawMode(false);
@@ -88,8 +94,14 @@ async function openWordPressAdmin() {
     } catch (error) {
         console.error('❌ Error:', error.message);
     } finally {
-        // Don't close browser automatically - let user close it
-        console.log('\n🖥️  Browser left open for your convenience. Close it when done.');
+        // Option to close browser
+        const shouldClose = process.env.AUTO_CLOSE_BROWSER === 'true';
+        if (shouldClose) {
+            await browser.close();
+            console.log('🔒 Browser closed automatically.');
+        } else {
+            console.log('\n🖥️  Browser left open for your convenience. Close it when done.');
+        }
     }
 }
 

@@ -4,6 +4,11 @@
 
 This document provides comprehensive documentation for the WordPress Model Context Protocol (MCP) integration implemented in the Docker WordPress project. The integration enables AI assistants to interact with WordPress sites through standardized MCP tools while coordinating with browser automation.
 
+**Core Implementation Files:**
+- [`custom-wp-mcp.mjs`](./custom-wp-mcp.mjs) - Main WordPress MCP server
+- [`config/environment-manager.js`](./config/environment-manager.js) - Environment configuration  
+- [`test-wp-mcp-auth.js`](./test-wp-mcp-auth.js) - Authentication testing
+
 ## Architecture
 
 ### Core Components
@@ -285,7 +290,7 @@ async function cleanup() {
 
 ### API Security
 
-1. **Rate Limiting**: Implement request rate limiting
+1. **Rate Limiting**: Implement request rate-limiting
 2. **Input Validation**: Validate all API inputs
 3. **Error Handling**: Don't expose sensitive information in errors
 4. **Audit Logging**: Log all API operations for security auditing

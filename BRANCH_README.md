@@ -157,8 +157,8 @@ Transform the foundational WordPress MCP integration into a production-ready, sc
 - **End of Week 5**: Final integration review and merge preparation
 
 ## Estimated Duration
-**Total: 4-5 weeks** (20-25 development days)
-- **Core functionality**: 2-3 weeks
+**Total: 4–5 weeks** (20–25 development days)
+- **Core functionality**: 2–3 weeks
 - **Quality assurance and optimization**: 1-2 weeks
 - **Documentation and developer experience**: 1 week
 

@@ -24,8 +24,13 @@ class WordPressAdminLogin {
     async takeScreenshot(name) {
         if (this.page) {
             try {
+                const fs = require('fs').promises;
+                const path = require('path');
+                const screenshotsDir = path.resolve(__dirname, 'screenshots');
+                await fs.mkdir(screenshotsDir, { recursive: true });
+                
                 await this.page.screenshot({ 
-                    path: `screenshots/${name}-${Date.now()}.png`,
+                    path: path.join(screenshotsDir, `${name}-${Date.now()}.png`),
                     fullPage: true 
                 });
                 this.log('info', `Screenshot saved: ${name}`);

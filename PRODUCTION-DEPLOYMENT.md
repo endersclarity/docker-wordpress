@@ -291,7 +291,7 @@ docker-compose -f docker-compose.production.yml up -d --force-recreate
 - **Redis Object Cache**: For database query caching
 - **W3 Total Cache**: For page caching (configure with Redis)
 - **Smush**: For image optimization
-- **Yoast SEO**: For SEO optimization
+- **Yoast SEO**: For SEO
 
 ### Server-Level Optimizations
 - Enable HTTP/2 and HTTP/3
