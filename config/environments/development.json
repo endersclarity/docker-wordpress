@@ -1,0 +1,57 @@
+{
+  "environment": "development",
+  "wordpress": {
+    "url": "http://localhost:8090",
+    "version": "6.4-fpm-alpine",
+    "debug": true,
+    "memory_limit": "256M",
+    "security_keys": {
+      "AUTH_KEY": "!80FWD8cCnMDZyd$rVA8TSkJNd2fYj*tA!JlOuJ3zEZsNiFsIkKjRZJNhAX&bTHM",
+      "SECURE_AUTH_KEY": "FZw6zMAZ4RQlc#*jqyY#U7&ub&RoDLUQQ5EQ3Z8td0FaHk6yE@7WDXXJAN5U5&Qg",
+      "LOGGED_IN_KEY": "ZH6Urdt0Whx88j9NZX8j7Z#co0!CCYmpV1vc$oGpCQynDePXVusI5IQis!UyeQP7",
+      "NONCE_KEY": "@VTKEMu#5m2#oEd%g^sgJvvgbbs45GbhghWYEgSghG0yUmOCVsSU%W7cY8^i%Cg8",
+      "AUTH_SALT": "*XOP#8GbQE!zkFzmWn7TbZ@Z41eY3PcJJyxD9YyFyWBk@F&G7@lsr32VqMikbJBL",
+      "SECURE_AUTH_SALT": "45kVNy!eVUHI7&2hoc7G9NegG14GMyVAPaW!3SlMFHs3pMLGfxlG*sUqI6Zh1uPV",
+      "LOGGED_IN_SALT": "FRuOVH$191sqUm28g3veG^8wnadZTZ#VxLBNirp#v5I7Mh08PvfhXg3oiFDvvoYm",
+      "NONCE_SALT": "dZHiVnLlEGkBC@ktEm19HYjkG^i8&hFgaJ6k&EUWLzvEt4*MkKSAWZ7UyR^nyj#2"
+    }
+  },
+  "database": {
+    "host": "mysql",
+    "name": "wordpress",
+    "user": "wordpress",
+    "password": "muHLHY80*DF3lb%HHTa4wuFOTaXUdTLU",
+    "root_password": "gwo1fcd@LoWkpUELjLJ6zH*BnjtAXN$n"
+  },
+  "redis": {
+    "enabled": true,
+    "password": "l@t1l*Q17TO$OXV8BLYurcLocIxt@WYz",
+    "max_memory": "256mb"
+  },
+  "ssl": {
+    "enabled": false,
+    "force_admin": false,
+    "cert_path": "/etc/nginx/ssl/cert.pem",
+    "key_path": "/etc/nginx/ssl/private.key"
+  },
+  "security": {
+    "file_edit_disabled": false,
+    "auto_updates_disabled": false,
+    "post_revisions": 5
+  },
+  "performance": {
+    "mysql_buffer_pool": "256M",
+    "mysql_max_connections": 100,
+    "nginx_worker_processes": "auto"
+  },
+  "backup": {
+    "enabled": false,
+    "schedule": "0 2 * * *",
+    "retention_days": 7
+  },
+  "monitoring": {
+    "enabled": false,
+    "prometheus_enabled": false,
+    "grafana_enabled": false
+  }
+}

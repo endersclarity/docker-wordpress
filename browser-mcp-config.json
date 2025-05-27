@@ -1,0 +1,71 @@
+{
+  "name": "Browser MCP WordPress Automation",
+  "description": "Browser automation server for WordPress development workflows",
+  "version": "1.0.0",
+  "mcp": {
+    "server": "@browsermcp/mcp",
+    "capabilities": [
+      "browser_automation",
+      "web_navigation", 
+      "form_interaction",
+      "element_interaction",
+      "screenshot_capture"
+    ]
+  },
+  "wordpress": {
+    "url": "http://localhost:8090",
+    "admin_url": "http://localhost:8090/wp-admin",
+    "install_url": "http://localhost:8090/wp-admin/install.php",
+    "credentials": {
+      "username": "admin",
+      "password": "D@wordpresska79823!4",
+      "email": "endersclarity@gmail.com"
+    }
+  },
+  "browser": {
+    "headless": false,
+    "slowMo": 100,
+    "timeout": 30000,
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    }
+  },
+  "automation": {
+    "retry_attempts": 3,
+    "wait_timeout": 10000,
+    "screenshot_on_error": true,
+    "log_level": "info"
+  },
+  "workflows": {
+    "wordpress_install": {
+      "enabled": true,
+      "steps": [
+        "navigate_to_install",
+        "fill_installation_form", 
+        "submit_installation",
+        "verify_installation"
+      ]
+    },
+    "theme_activation": {
+      "enabled": true,
+      "target_theme": "narissa-real-estate-theme",
+      "steps": [
+        "login_to_admin",
+        "navigate_to_themes",
+        "activate_theme",
+        "verify_activation"
+      ]
+    },
+    "content_creation": {
+      "enabled": true,
+      "content_types": ["pages", "posts", "menus"],
+      "steps": [
+        "create_pages",
+        "create_posts", 
+        "setup_menus",
+        "configure_widgets"
+      ]
+    }
+  }
+}
