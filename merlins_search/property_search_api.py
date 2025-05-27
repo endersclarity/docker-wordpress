@@ -1,29 +1,40 @@
 #!/usr/bin/env python3
 """
 Property Search API Server
-FastAPI server for semantic property search
+FastAPI server for semantic property search with security and performance optimizations
 """
 
-from fastapi import FastAPI, HTTPException
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+from fastapi import FastAPI, HTTPException, Request
+from pydantic import BaseModel, Field
 import json
 import os
 import re
 from typing import List, Dict, Any, Optional
 import uvicorn
+import logging
 from gemini_embedder import GeminiPropertyEmbedder
-
-app = FastAPI(title="Property Search API", version="1.0.0")
-
-# Enable CORS for WordPress integration
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
+from security_config import (
+    security_middleware, 
+    configure_cors_middleware, 
+    configure_trusted_hosts_middleware,
+    setup_logging,
+    validate_environment,
+    get_security_info
 )
+
+# Initialize FastAPI app
+app = FastAPI(
+    title="Merlin's Property Search API",
+    version="2.0.0",
+    description="Semantic property search engine with AI-powered embeddings",
+    docs_url="/docs" if os.getenv('API_DEBUG', 'false').lower() == 'true' else None,
+    redoc_url="/redoc" if os.getenv('API_DEBUG', 'false').lower() == 'true' else None
+)
+
+# Configure security middleware
+app.middleware("http")(security_middleware)
+configure_cors_middleware(app)
+configure_trusted_hosts_middleware(app)
 
 # Global variables for property data
 properties_data = []
@@ -31,8 +42,10 @@ embeddings_data = None
 gemini_embedder = None
 
 class SearchRequest(BaseModel):
-    query: str
-    limit: int = 5
+    query: str = Field(..., min_length=1, max_length=500, description="Search query")
+    limit: int = Field(default=5, ge=1, le=50, description="Maximum number of results")
+    property_type: Optional[str] = Field(None, description="Filter by property type")
+    price_range: Optional[str] = Field(None, description="Filter by price range")
 
 class SearchResponse(BaseModel):
     query: str
@@ -63,7 +76,9 @@ def load_embeddings_data():
         
         # Initialize Gemini embedder for query embeddings
         try:
-            api_key = os.getenv('GEMINI_API_KEY', 'AIzaSyCJ8-hQJVLGXDkHy2sjw-O6Dls0FVO0gGU')
+            api_key = os.getenv('GEMINI_API_KEY')
+            if not api_key:
+                raise ValueError("GEMINI_API_KEY environment variable is required")
             gemini_embedder = GeminiPropertyEmbedder(api_key)
             print("Gemini embedder initialized for query processing")
         except Exception as e:
@@ -194,22 +209,36 @@ async def health_check():
 
 @app.post("/search", response_model=SearchResponse)
 async def search_properties(request: SearchRequest):
-    """Search properties by query"""
+    """Search properties by query with enhanced error handling"""
     
-    if not properties_data:
-        raise HTTPException(status_code=503, detail="Property data not loaded")
-    
-    # Use embedding search if available, otherwise fall back to text search
-    if embeddings_data:
-        results = embedding_search_properties(request.query, request.limit)
-    else:
-        results = text_search_properties(request.query, request.limit)
-    
-    return SearchResponse(
-        query=request.query,
-        results=results,
-        total_found=len(results)
-    )
+    try:
+        if not properties_data:
+            raise HTTPException(status_code=503, detail="Property data not loaded")
+        
+        # Validate and sanitize input
+        query = request.query.strip()
+        if not query:
+            raise HTTPException(status_code=400, detail="Query cannot be empty")
+        
+        # Use embedding search if available, otherwise fall back to text search
+        if embeddings_data and gemini_embedder:
+            results = embedding_search_properties(query, request.limit)
+        else:
+            results = text_search_properties(query, request.limit)
+        
+        return SearchResponse(
+            query=query,
+            results=results,
+            total_found=len(results)
+        )
+        
+    except HTTPException:
+        raise
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logging.error(f"Search error: {e}")
+        raise HTTPException(status_code=500, detail="Internal server error")
 
 @app.get("/search")
 async def search_properties_get(query: str, limit: int = 5):
@@ -217,19 +246,57 @@ async def search_properties_get(query: str, limit: int = 5):
     request = SearchRequest(query=query, limit=limit)
     return await search_properties(request)
 
+@app.get("/security")
+async def security_info():
+    """Get security configuration info (debug endpoint)"""
+    if not os.getenv('API_DEBUG', 'false').lower() == 'true':
+        raise HTTPException(status_code=404, detail="Endpoint not available")
+    return get_security_info()
+
 @app.on_event("startup")
 async def startup_event():
-    """Load data on startup"""
+    """Initialize application on startup"""
+    # Set up logging
+    setup_logging()
+    
+    # Validate environment
+    validate_environment()
+    
+    # Load data
+    logging.info("Loading property data...")
     load_property_data()
     load_embeddings_data()
+    
+    logging.info(f"API server ready with {len(properties_data)} properties")
 
 if __name__ == "__main__":
-    print("Starting Property Search API Server...")
+    # Environment validation
+    try:
+        validate_environment()
+        setup_logging()
+    except ValueError as e:
+        print(f"Configuration error: {e}")
+        exit(1)
+    
+    print("Starting Merlin's Property Search API Server...")
     print("Loading property data...")
     load_property_data()
     load_embeddings_data()
     
     print(f"Server ready with {len(properties_data)} properties")
-    print("Starting server on http://localhost:5000")
     
-    uvicorn.run(app, host="0.0.0.0", port=5000)
+    # Get configuration
+    host = os.getenv('API_HOST', '0.0.0.0')
+    port = int(os.getenv('API_PORT', '5000'))
+    debug = os.getenv('API_DEBUG', 'false').lower() == 'true'
+    
+    print(f"Starting server on http://{host}:{port}")
+    if debug:
+        print("Debug mode enabled - API docs available at /docs")
+    
+    uvicorn.run(
+        app, 
+        host=host, 
+        port=port,
+        log_level="info" if not debug else "debug"
+    )
