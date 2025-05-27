@@ -45,41 +45,41 @@ async function openWordPressAdmin() {
         
         // Wait for user input
         const readline = require('readline');
-        const rl1 = readline.createInterface({
+        const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
         
         await new Promise(resolve => {
-            rl1.question('Press Enter when you have completed the steps above...', () => {
+            rl.question('Press Enter when you have completed the steps above...', () => {
                 resolve();
             });
         });
         
-        rl1.close();
+        rl.close();
         
         console.log('\n💾 Please paste the application password below:');
         process.stdin.setRawMode(false);
         
         // Get password from user
-        const rl2 = readline.createInterface({
+        const readline = require('readline');
+        const rl = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
         
         const password = await new Promise(resolve => {
-            rl2.question('Application Password: ', (answer) => {
+            rl.question('Application Password: ', (answer) => {
                 resolve(answer.trim());
             });
         });
         
-        rl2.close();
+        rl.close();
         
         if (password && password.length > 10) {
             // Update config file
             const fs = require('fs');
-            const path = require('path');
-            const configPath = process.env.WP_SITES_CONFIG_PATH || path.resolve(process.cwd(), 'wp-sites-config.json');
+            const configPath = '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
             const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
             config.docker.PASS = password;
             config.docker.AUTH_TYPE = 'application';
@@ -94,11 +94,8 @@ async function openWordPressAdmin() {
     } catch (error) {
         console.error('❌ Error:', error.message);
     } finally {
-        // Option to close browser - default to auto-close in non-TTY environments
-        const isHeadless = !process.stdout.isTTY;
-        const shouldClose = process.env.AUTO_CLOSE_BROWSER === 'true' || 
-                           (process.env.AUTO_CLOSE_BROWSER !== 'false' && isHeadless);
-        
+        // Option to close browser
+        const shouldClose = process.env.AUTO_CLOSE_BROWSER === 'true';
         if (shouldClose) {
             await browser.close();
             console.log('🔒 Browser closed automatically.');

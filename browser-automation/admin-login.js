@@ -10,9 +10,7 @@ class WordPressAdminLogin {
     constructor() {
         this.browser = null;
         this.page = null;
-        const path = require('path');
-        const configPath = path.resolve(__dirname, '..', 'browser-mcp-config.json');
-        this.config = require(configPath);
+        this.config = require('../browser-mcp-config.json');
     }
 
     async log(level, message, data = null) {
@@ -46,16 +44,13 @@ class WordPressAdminLogin {
         try {
             this.log('info', 'Initializing browser for admin login');
             
-            // Ensure browser config exists with defaults
-            const browserConfig = this.config.browser || {};
-            
             this.browser = await chromium.launch({
-                headless: browserConfig.headless !== false,
-                slowMo: browserConfig.slowMo || 100
+                headless: this.config.browser.headless,
+                slowMo: this.config.browser.slowMo
             });
             
             this.page = await this.browser.newPage({
-                viewport: browserConfig.viewport || { width: 1280, height: 720 }
+                viewport: this.config.browser.viewport
             });
             
             this.log('info', 'Browser initialized successfully');
@@ -130,8 +125,7 @@ class WordPressAdminLogin {
             await this.page.click('#wp-submit');
             
             // Wait for login to complete
-            const browserConfig = this.config.browser || {};
-            await this.page.waitForTimeout(browserConfig.loginTimeout || 5000);
+            await this.page.waitForTimeout(3000);
             
             const currentUrl = this.page.url();
             const title = await this.page.title();
@@ -142,10 +136,7 @@ class WordPressAdminLogin {
             });
             
             // Check if login was successful
-            if (
-                title.includes('Dashboard') ||
-                (currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login'))
-            ) {
+            if (title.includes('Dashboard') || currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login')) {
                 await this.takeScreenshot('login-success');
                 return { success: true, loggedIn: true };
             } else {

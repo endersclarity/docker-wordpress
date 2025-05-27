@@ -30,7 +30,7 @@ The production deployment includes:
    - `MYSQL_PASSWORD`: Secure database password
    - `MYSQL_ROOT_PASSWORD`: Secure root password
    - `REDIS_PASSWORD`: Secure Redis password
-   - WordPress security keys (generate at [WordPress.org](https://api.wordpress.org/secret-key/1.1/salt/))
+   - WordPress security keys (generate at https://api.wordpress.org/secret-key/1.1/salt/)
 
 3. **Deploy production environment:**
    ```bash
