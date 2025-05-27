@@ -12,6 +12,7 @@ import os
 import re
 from typing import List, Dict, Any, Optional
 import uvicorn
+from gemini_embedder import GeminiPropertyEmbedder
 
 app = FastAPI(title="Property Search API", version="1.0.0")
 
@@ -27,6 +28,7 @@ app.add_middleware(
 # Global variables for property data
 properties_data = []
 embeddings_data = None
+gemini_embedder = None
 
 class SearchRequest(BaseModel):
     query: str
@@ -51,13 +53,23 @@ def load_property_data():
 
 def load_embeddings_data():
     """Load embeddings data if available"""
-    global embeddings_data
+    global embeddings_data, gemini_embedder
     
     embeddings_path = "property_embeddings_gemini.json"
     if os.path.exists(embeddings_path):
         with open(embeddings_path, 'r') as f:
             embeddings_data = json.load(f)
         print(f"Loaded embeddings for {len(embeddings_data.get('listings', []))} properties")
+        
+        # Initialize Gemini embedder for query embeddings
+        try:
+            api_key = os.getenv('GEMINI_API_KEY', 'AIzaSyCJ8-hQJVLGXDkHy2sjw-O6Dls0FVO0gGU')
+            gemini_embedder = GeminiPropertyEmbedder(api_key)
+            print("Gemini embedder initialized for query processing")
+        except Exception as e:
+            print(f"Warning: Could not initialize Gemini embedder: {e}")
+            gemini_embedder = None
+        
         return True
     return False
 
@@ -134,8 +146,39 @@ def text_search_properties(query: str, limit: int = 5) -> List[Dict[str, Any]]:
 
 def embedding_search_properties(query: str, limit: int = 5) -> List[Dict[str, Any]]:
     """Semantic search using embeddings (when available)"""
-    # TODO: Implement when embeddings are ready
-    return []
+    if not embeddings_data or not gemini_embedder:
+        print("Embeddings not available, falling back to text search")
+        return text_search_properties(query, limit)
+    
+    try:
+        # Use the Gemini embedder's search function
+        results = gemini_embedder.search_similar_properties(query, embeddings_data, top_k=limit)
+        
+        # Format results for API response
+        formatted_results = []
+        for result in results:
+            formatted_result = {
+                'id': result.get('listing_id'),
+                'title': f"{result.get('bedrooms', '?')} bed, {result.get('bathrooms', '?')} bath home",
+                'address': result.get('address', 'Address not available'),
+                'price': f"${result.get('price', 0):,.0f}" if result.get('price') else "Price not available",
+                'image': "https://images.unsplash.com/photo-1564013799919-ab600027ffc6?w=400",  # Placeholder
+                'bedrooms': result.get('bedrooms', '?'),
+                'bathrooms': result.get('bathrooms', '?'),
+                'sqft': result.get('sqft', 0),
+                'description': result.get('enhanced_description', result.get('original_description', ''))[:200] + "...",
+                'similarity_score': result.get('similarity_score', 0),
+                'search_type': 'semantic_embedding'
+            }
+            formatted_results.append(formatted_result)
+        
+        print(f"Semantic search returned {len(formatted_results)} results for query: '{query}'")
+        return formatted_results
+        
+    except Exception as e:
+        print(f"Error in embedding search: {e}")
+        print("Falling back to text search")
+        return text_search_properties(query, limit)
 
 @app.get("/")
 async def root():
