@@ -1,0 +1,14 @@
+{
+  "docker": {
+    "URL": "http://localhost:8090",
+    "USER": "admin",
+    "PASS": "D@wordpresska79823!4",
+    "AUTH_TYPE": "password"
+  },
+  "local": {
+    "URL": "https://narissarealtycom.local",
+    "USER": "admin",
+    "PASS": "PLACEHOLDER_FOR_LOCAL_PASSWORD",
+    "AUTH_TYPE": "password"
+  }
+}

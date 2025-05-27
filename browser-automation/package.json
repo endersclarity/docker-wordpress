@@ -1,0 +1,28 @@
+{
+  "name": "wordpress-browser-automation",
+  "version": "1.0.0",
+  "description": "Browser automation for WordPress development workflows",
+  "main": "wordpress-installer.js",
+  "scripts": {
+    "install-wp": "node wordpress-installer.js",
+    "test-automation": "node test-automation.js",
+    "admin-login": "node admin-login.js",
+    "theme-setup": "node theme-setup.js"
+  },
+  "dependencies": {
+    "@browsermcp/mcp": "^0.1.3",
+    "playwright": "^1.40.0"
+  },
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  },
+  "keywords": [
+    "wordpress",
+    "automation",
+    "browser",
+    "mcp",
+    "testing"
+  ],
+  "author": "Claude Code",
+  "license": "MIT"
+}
