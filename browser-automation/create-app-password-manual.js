@@ -5,6 +5,7 @@
  */
 
 const { chromium } = require('playwright');
+const readline = require('readline');
 
 async function openWordPressAdmin() {
     console.log('🔐 Opening WordPress admin for manual application password creation...');
@@ -44,42 +45,40 @@ async function openWordPressAdmin() {
         console.log('5. Press Enter in this terminal when done');
         
         // Wait for user input
-        const readline = require('readline');
-        const rl = readline.createInterface({
+        const rl1 = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
         
         await new Promise(resolve => {
-            rl.question('Press Enter when you have completed the steps above...', () => {
+            rl1.question('Press Enter when you have completed the steps above...', () => {
                 resolve();
             });
         });
         
-        rl.close();
+        rl1.close();
         
         console.log('\n💾 Please paste the application password below:');
         process.stdin.setRawMode(false);
         
         // Get password from user
-        const readline = require('readline');
-        const rl = readline.createInterface({
+        const rl2 = readline.createInterface({
             input: process.stdin,
             output: process.stdout
         });
         
         const password = await new Promise(resolve => {
-            rl.question('Application Password: ', (answer) => {
+            rl2.question('Application Password: ', (answer) => {
                 resolve(answer.trim());
             });
         });
         
-        rl.close();
+        rl2.close();
         
         if (password && password.length > 10) {
             // Update config file
             const fs = require('fs');
-            const configPath = '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
+            const configPath = process.env.WP_CONFIG_PATH || '/home/ender/.claude/projects/docker-wordpress/wp-sites-config.json';
             const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
             config.docker.PASS = password;
             config.docker.AUTH_TYPE = 'application';

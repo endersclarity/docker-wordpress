@@ -23,7 +23,7 @@
 ### Preparation
 1. **Environment Setup**
    - [ ] Start Docker containers: `docker-compose up -d`
-   - [ ] Verify WordPress accessibility at http://localhost:8090
+   - [ ] Verify WordPress accessibility at <http://localhost:8090>
    - [ ] Connect Browser MCP
    - [ ] Take baseline screenshots
 
@@ -34,12 +34,12 @@
 
 ### Implementation
 3. **Claude Code Actions**
-   ```
+   ```bash
    [Specific Claude Code commands and file operations]
    ```
 
 4. **Browser MCP Actions**
-   ```
+   ```javascript
    [Specific Browser MCP commands for testing and validation]
    ```
 

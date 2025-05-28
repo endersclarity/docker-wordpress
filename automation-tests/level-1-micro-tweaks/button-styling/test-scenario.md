@@ -11,7 +11,7 @@
 Change the search button color from current theme color to a magical Disney-inspired gradient with enhanced hover effects. This tests our ability to make precise CSS modifications without affecting other elements.
 
 ## Prerequisites
-- [ ] WordPress site is running at http://localhost:8090
+- [ ] WordPress site is running at <http://localhost:8090>
 - [ ] Cottage search interface is accessible
 - [ ] Browser MCP is connected and functional
 - [ ] Current button styling is documented

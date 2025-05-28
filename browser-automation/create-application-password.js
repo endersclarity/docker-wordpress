@@ -53,6 +53,7 @@ async function createApplicationPassword() {
         
     } catch (error) {
         console.error('❌ Error creating application password:', error.message);
+        fs.mkdirSync('screenshots', { recursive: true });
         await page.screenshot({ path: 'screenshots/app-password-error.png' });
         return null;
     } finally {

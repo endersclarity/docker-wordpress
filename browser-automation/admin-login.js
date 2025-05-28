@@ -5,6 +5,8 @@
  */
 
 const { chromium } = require('playwright');
+const fs = require('fs').promises;
+const path = require('path');
 
 class WordPressAdminLogin {
     constructor() {
@@ -24,8 +26,6 @@ class WordPressAdminLogin {
     async takeScreenshot(name) {
         if (this.page) {
             try {
-                const fs = require('fs').promises;
-                const path = require('path');
                 const screenshotsDir = path.resolve(__dirname, 'screenshots');
                 await fs.mkdir(screenshotsDir, { recursive: true });
                 
@@ -136,7 +136,10 @@ class WordPressAdminLogin {
             });
             
             // Check if login was successful
-            if (title.includes('Dashboard') || currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login')) {
+            const isDashboard = title.includes('Dashboard');
+            const isAdminArea = currentUrl.includes('wp-admin') && !currentUrl.includes('wp-login');
+            
+            if (isDashboard || isAdminArea) {
                 await this.takeScreenshot('login-success');
                 return { success: true, loggedIn: true };
             } else {
