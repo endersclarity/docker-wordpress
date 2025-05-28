@@ -1,3 +1,4 @@
+# WordPress development environment
 services:
   wordpress:
     image: wordpress:latest

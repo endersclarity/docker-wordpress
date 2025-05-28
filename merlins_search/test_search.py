@@ -5,7 +5,6 @@ Test the Merlin's Shack semantic search with a demo API key setup.
 
 import os
 import json
-from embedding_generator import PropertyEmbeddingGenerator
 
 def demo_search_system():
     """Demo the search system with sample data if no API key available."""

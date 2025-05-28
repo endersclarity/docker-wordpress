@@ -5,10 +5,7 @@ Tests all components, error handling, and edge cases.
 """
 
 import json
-import os
 import time
-import tempfile
-from typing import List, Dict, Any
 from search_api import load_embeddings_data, fallback_keyword_search
 from embedding_generator import PropertyEmbeddingGenerator
 
@@ -117,12 +114,12 @@ class ComprehensiveSearchTests:
         """Test embedding generator error handling."""
         # Test without API key
         try:
-            generator = PropertyEmbeddingGenerator()
-            assert False, "Should fail without API key"
+            PropertyEmbeddingGenerator()
+            raise AssertionError("Should fail without API key")
         except ValueError:
             pass  # Expected
         except Exception as e:
-            assert False, f"Wrong exception type: {e}"
+            raise AssertionError(f"Wrong exception type: {e}")
         
         print("   Error handling working correctly")
     

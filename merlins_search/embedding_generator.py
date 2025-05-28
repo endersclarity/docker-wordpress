@@ -8,7 +8,6 @@ import json
 import os
 import time
 from typing import List, Dict, Any
-import openai
 import numpy as np
 from openai import OpenAI
 

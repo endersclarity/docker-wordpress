@@ -7,7 +7,7 @@ Flask API for semantic property search with vibe-based queries.
 import os
 import json
 import time
-from typing import List, Dict, Any
+from typing import List, Dict
 from flask import Flask, request, jsonify, render_template_string
 from flask_cors import CORS
 from embedding_generator import PropertyEmbeddingGenerator
@@ -114,18 +114,15 @@ def fallback_keyword_search(query: str, listings: List[Dict], top_k: int = 5) ->
         
         # Price range bonuses based on query type
         price = listing.get('price', 0)
-        if 'luxury' in query_lower or 'castle' in query_lower or 'mansion' in query_lower:
-            if price > 1000000:
-                score += 3
-        elif 'cottage' in query_lower or 'shack' in query_lower or 'cozy' in query_lower:
-            if 300000 <= price <= 800000:
-                score += 2
+        if ('luxury' in query_lower or 'castle' in query_lower or 'mansion' in query_lower) and price > 1000000:
+            score += 3
+        elif ('cottage' in query_lower or 'shack' in query_lower or 'cozy' in query_lower) and 300000 <= price <= 800000:
+            score += 2
         
         # Acreage bonuses
         acres = listing.get('lot_acres', 0)
-        if 'estate' in query_lower or 'retreat' in query_lower:
-            if acres >= 5:
-                score += 2
+        if ('estate' in query_lower or 'retreat' in query_lower) and acres >= 5:
+            score += 2
         
         if score > 0:
             result = listing.copy()
@@ -303,4 +300,5 @@ if __name__ == '__main__':
     print("API ready!")
     print("Open http://localhost:5001 to test the search interface")
     
-    app.run(host='0.0.0.0', port=5001, debug=True)
+    debug_mode = os.getenv('FLASK_DEBUG', 'False').lower() == 'true'
+    app.run(host='0.0.0.0', port=5001, debug=debug_mode)

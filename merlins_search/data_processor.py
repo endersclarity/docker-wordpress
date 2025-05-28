@@ -6,8 +6,6 @@ Enhances MLS listing descriptions for better vector embeddings and vibe-based se
 
 import pandas as pd
 import re
-import json
-from typing import Dict, List, Any
 
 class PropertyVibeEnhancer:
     """Enhances property descriptions to capture vibes and emotional context."""
@@ -61,7 +59,6 @@ class PropertyVibeEnhancer:
         
         # Base information
         address = f"{row['Address - Street Complete']}, {row['Address - City']}"
-        price = f"${row['List Price']:,.0f}" if pd.notna(row['List Price']) else "Price Available Upon Request"
         bedrooms = str(row['Bedrooms And Possible Bedrooms']).replace('(', 'up to ').replace(')', '') if pd.notna(row['Bedrooms And Possible Bedrooms']) else 'Multiple'
         bathrooms = str(int(row['Full Bathrooms'])) if pd.notna(row['Full Bathrooms']) else 'Multiple'
         sqft = f"{row['Square Footage']:,.0f}" if pd.notna(row['Square Footage']) else ''
@@ -230,6 +227,6 @@ if __name__ == "__main__":
         sample = enhanced_df.iloc[0]
         print(f"Address: {sample['address']}")
         print(f"Price: ${sample['price']:,.0f}")
-        print(f"Enhanced Description:")
+        print("Enhanced Description:")
         print(sample['enhanced_description'])
         print("="*80)
