@@ -5,7 +5,7 @@
 
 class CottageSearch {
     constructor() {
-        this.apiBaseUrl = '/merlins_search'; // Adjust based on API deployment
+        this.apiBaseUrl = 'http://localhost:5001'; // Our optimized semantic search API
         this.currentQuery = '';
         this.currentFilters = {};
         this.searchTimeout = null;
@@ -111,9 +111,7 @@ class CottageSearch {
                 },
                 body: JSON.stringify({
                     query: params.query,
-                    limit: params.limit || 10,
-                    property_type: params.property_type,
-                    price_range: params.price_range
+                    top_k: params.limit || 10
                 })
             });
 
@@ -125,8 +123,8 @@ class CottageSearch {
             
             // Transform API response to expected format
             return {
-                results: data.results || data.properties || [],
-                total: data.total || (data.results ? data.results.length : 0),
+                results: data.properties || [],
+                total: data.total || 0,
                 query: params.query,
                 api_response: data
             };
@@ -231,14 +229,14 @@ class CottageSearch {
         card.className = 'property-card';
         card.onclick = () => this.showPropertyModal(property);
 
-        // Handle both API response format and mock data format
-        const title = property.Address || property.title || 'Property';
-        const price = property['List Price'] || property.price || 0;
-        const location = property.City || property.location || 'Nevada County, CA';
-        const beds = property.Bedrooms || property.bedrooms || 'N/A';
-        const baths = property.Bathrooms || property.bathrooms || 'N/A';
-        const sqft = property['Square Feet'] || property.sqft || 'N/A';
-        const description = property.enhanced_description || property.description || property.Remarks || 'Beautiful property in Nevada County';
+        // Handle optimized API response format and fallback to mock data
+        const title = property.address || property.title || 'Property';
+        const price = property.price || 0;
+        const location = property.city || property.location || 'Nevada County, CA';
+        const beds = property.bedrooms || 'N/A';
+        const baths = property.bathrooms || 'N/A';
+        const sqft = property.sqft || 'N/A';
+        const description = property.enhanced_description || property.description || 'Beautiful property in Nevada County';
         const similarityScore = property.similarity_score || property.score || 0;
         const imageUrl = property.image_url || `https://via.placeholder.com/400x300/228B22/FFFFFF?text=${encodeURIComponent(title)}`;
 
