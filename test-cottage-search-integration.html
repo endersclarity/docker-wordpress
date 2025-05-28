@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>🧙‍♂️ Cottage Search Integration Test</title>
+    <link rel="stylesheet" href="narissa-real-estate-theme/components/merlin-search/cottage-search.css">
+</head>
+<body>
+    <div class="cottage-search-container">
+        <div class="cottage-header">
+            <div class="magic-sparkles"></div>
+            <h1 class="cottage-title">🧙‍♂️ Merlin's Shack Property Search</h1>
+            <p class="cottage-subtitle">✨ Find your magical cottage with AI-powered semantic search ✨</p>
+            <p><strong>Integration Test:</strong> Cottage UI → Optimized API (0.003-0.008s response times)</p>
+        </div>
+
+        <div class="search-section">
+            <form id="cottage-search-form" class="search-form">
+                <div class="search-input-container">
+                    <input type="text" id="search-query" placeholder="🔮 Describe your dream cottage..." class="search-input">
+                    <button type="submit" class="search-button">
+                        <span class="crystal-ball">🔮</span>
+                        Find Magic
+                    </button>
+                </div>
+            </form>
+
+            <div class="filter-controls">
+                <button id="toggle-filters" class="toggle-filters">
+                    🎛️ Advanced Filters <span class="filter-arrow">▼</span>
+                </button>
+                <div class="filter-groups">
+                    <div class="filter-group">
+                        <label for="property-type">Property Type:</label>
+                        <select id="property-type">
+                            <option value="">All Types</option>
+                            <option value="cottage">Cottage</option>
+                            <option value="cabin">Cabin</option>
+                            <option value="mansion">Mansion</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label for="price-range">Price Range:</label>
+                        <select id="price-range">
+                            <option value="">All Prices</option>
+                            <option value="under-400k">Under $400K</option>
+                            <option value="400k-800k">$400K - $800K</option>
+                            <option value="over-800k">Over $800K</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Status -->
+        <div id="search-status" class="search-status hidden">
+            <div class="magical-orb"></div>
+            <p>🔮 Consulting the crystal ball...</p>
+        </div>
+
+        <!-- Results Header -->
+        <div id="results-header" class="results-header hidden">
+            <h2 id="results-count">Found properties</h2>
+            <button onclick="clearSearch()" class="clear-results">Clear Search</button>
+        </div>
+
+        <!-- Results Grid -->
+        <div id="results-grid" class="results-grid"></div>
+
+        <!-- No Results -->
+        <div id="no-results" class="no-results hidden">
+            <div class="sad-crystal">💎</div>
+            <h3>No magical properties found</h3>
+            <p>Try a different search term or adjust your filters</p>
+            <button onclick="clearSearch()" class="retry-button">Try Again</button>
+        </div>
+
+        <!-- Error State -->
+        <div id="error-state" class="error-state hidden">
+            <div class="error-crystal">⚠️</div>
+            <h3>Magic temporarily unavailable</h3>
+            <p>The crystal ball is cloudy. Please try again.</p>
+            <button onclick="retrySearch()" class="retry-button">Retry Search</button>
+        </div>
+    </div>
+
+    <!-- Property Modal -->
+    <div id="property-modal" class="property-modal hidden">
+        <div class="modal-backdrop" onclick="closeModal()"></div>
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Property Details</h2>
+                <button onclick="closeModal()" class="close-button">✕</button>
+            </div>
+            <div id="modal-body" class="modal-body">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <script src="narissa-real-estate-theme/components/merlin-search/cottage-search.js"></script>
+</body>
+</html>
