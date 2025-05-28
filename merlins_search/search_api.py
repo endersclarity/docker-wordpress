@@ -71,7 +71,11 @@ def get_generator():
 def fallback_keyword_search(query: str, listings: List[Dict], top_k: int = 5) -> List[Dict]:
     """Fallback keyword-based search when embeddings aren't available."""
     
-    query_lower = query.lower()
+    # Handle empty or whitespace-only queries
+    if not query or not query.strip():
+        return []
+    
+    query_lower = query.lower().strip()
     
     # Enhanced keyword mappings for better matches
     keyword_mappings = {
