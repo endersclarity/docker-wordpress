@@ -286,7 +286,7 @@ def health_check():
         'status': 'healthy',
         'properties_loaded': len(embeddings_data['listings']) if embeddings_data else 0,
         'semantic_search_available': generator is not None,
-        'embeddings_available': embeddings_data and 'embedding' in embeddings_data.get('listings', [{}])[0] if embeddings_data else False
+        'embeddings_available': bool(embeddings_data and embeddings_data.get('listings') and len(embeddings_data['listings']) > 0 and 'embedding' in embeddings_data['listings'][0])
     })
 
 if __name__ == '__main__':
