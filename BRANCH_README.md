@@ -1,158 +1,79 @@
-# Branch: feature/react-component-migration + Production Infrastructure
+# Branch: feature/wordpress-rest-api-integration
 
 ## Purpose
-Implement React component foundation for headless WordPress architecture while integrating with production-ready deployment infrastructure. This branch combines UI component development with enterprise-grade deployment capabilities.
+Connect the completed React TypeScript cottage search components with WordPress REST API to create a fully functional headless WordPress architecture. This bridges the gap between the working semantic search API (458 Nevada County properties) and WordPress content management.
 
-## Dual-Track Success Criteria
-
-### 🎨 React Component Foundation
-- [ ] **Component Library**: Complete React TypeScript components for cottage search UI
-- [ ] **Headless Architecture**: React frontend consuming WordPress REST API 
-- [ ] **Disney Theming**: Magical theming and animations ported to React components
-- [ ] **Performance Optimization**: Component optimization with React.memo and lazy loading
-- [ ] **API Integration**: SWR-based data fetching with error handling and caching
-
-### 🚀 Production Deployment Integration
-- [x] **Production Infrastructure**: Docker Compose with SSL/TLS, Redis caching, security hardening
-- [x] **Environment Management**: Multi-environment configuration system with validation
-- [x] **Security Implementation**: Rate limiting, security headers, container security
-- [x] **Testing Framework**: Comprehensive test suite for authentication and CRUD operations
-- [x] **Monitoring & Performance**: Sub-2 second response times with health checks
-
-## Architectural Vision
-
-This branch establishes the foundation for a modern headless WordPress deployment:
-
-1. **Backend**: Production WordPress with MCP integration (✅ Complete)
-2. **Frontend**: React components with Next.js framework (🔄 In Progress)
-3. **Infrastructure**: Docker production deployment with SSL (✅ Complete)
-4. **Integration**: React frontend deployed alongside WordPress API
-
-## React Component Architecture
-
-### Directory Structure
-```
-frontend/src/
-├── components/cottage-search/
-│   ├── SearchContainer.tsx         # Main orchestration component
-│   ├── SearchInput.tsx            # Search query input with debouncing
-│   ├── FilterPanel.tsx            # Property filters (type, price, amenities)
-│   ├── PropertyCard.tsx           # Property display component
-│   ├── PropertyModal.tsx          # Detailed property view
-│   ├── LoadingStates.tsx          # Loading animations and placeholders
-│   └── ErrorBoundary.tsx          # Error handling and recovery
-├── hooks/cottage-search/
-│   ├── useSearch.ts               # Search state and API calls
-│   ├── usePropertyDetails.ts     # Individual property data fetching
-│   ├── useFilters.ts              # Filter state management
-│   └── useModal.ts                # Modal state control
-├── types/
-│   └── cottage-search.ts          # TypeScript interfaces
-└── lib/
-    └── api.ts                     # WordPress REST API client
-```
-
-### Technical Stack
-- **Framework**: Next.js 14 with App Router and TypeScript
-- **Styling**: Tailwind CSS with custom Disney theme extensions
-- **State Management**: React hooks with SWR for server state
-- **API Client**: Custom WordPress REST API wrapper with error handling
-- **Performance**: React.memo, useMemo, dynamic imports for code splitting
-- **Testing**: Jest and React Testing Library for component testing
-
-## Legacy Asset Migration
-
-### From Vanilla JS/CSS to React
-```
-Legacy Assets → React Components
-├── cottage-search.html → SearchContainer.tsx
-├── cottage-search.css → Tailwind classes + CSS modules
-├── cottage-search.js → useSearch + useFilters hooks
-└── demo.html → Next.js page with React components
-```
-
-## Dependencies
-
-### Completed Prerequisites (Master Branch)
-- ✅ Phase 5: Production deployment infrastructure with SSL and monitoring
-- ✅ Phase 4: WordPress MCP Integration (custom MCP server, API discovery)
-- ✅ Phase 3: Browser MCP automation framework  
-- ✅ Phase 2: Security implementation and production configuration
-- ✅ Phase 1: Docker WordPress infrastructure
-
-### React Component Requirements
-- Next.js 14+ for modern React features and App Router
-- TypeScript for type safety and developer experience
-- Tailwind CSS for utility-first styling with custom theming
-- SWR for efficient data fetching and caching
-- WordPress REST API endpoints for property data
-
-## Integration Testing
-
-### Component Testing
-- Unit tests for individual React components with Jest
-- Integration tests for search workflow from input to results
-- Performance testing for component rendering and state updates
-- Accessibility testing for WCAG compliance
-
-### Production Integration Testing  
-- React frontend deployment alongside WordPress backend
-- API authentication and data fetching validation
-- SSL/TLS configuration for React production build
-- Performance benchmarking for full-stack application
-
-## Deployment Architecture
-
-### Development Environment
-- WordPress API: `http://localhost:8090` (Docker container)
-- React Frontend: `http://localhost:3000` (Next.js dev server)
-- API Proxy: Next.js API routes for WordPress integration
-
-### Production Environment
-- WordPress API: `https://your-domain.com/api/` (Docker + Nginx + SSL)
-- React Frontend: `https://your-domain.com/` (Next.js production build)
-- CDN Integration: Optimized asset delivery for React components
+## Success Criteria
+1. **WordPress REST API Integration**: SWR-based API client connecting React components to WordPress content with error handling
+2. **Custom Post Types Implementation**: Property listings custom post type with semantic search metadata fields and REST API exposure
+3. **Headless Configuration**: WordPress configured for headless operation with proper CORS, authentication, and API optimization
+4. **Search Enhancement**: Semantic search API results integrated with WordPress property data for unified search experience
+5. **Production API Patterns**: Robust error handling, loading states, and caching strategies using SWR and React Query patterns
 
 ## Timeline
+- **Day 1**: WordPress headless configuration and custom post types setup
+- **Day 2**: React API integration layer and SWR implementation with error boundaries  
+- **Day 3**: Semantic search + WordPress data integration and production optimization
 
-### Phase 1: Component Development (Current)
-- ✅ TypeScript interfaces and component architecture
-- ✅ Core React components (SearchContainer, PropertyCard, etc.)
-- ✅ Custom hooks for state management
-- 🔄 Disney theme integration and animations
+## Technical Goals
+- Implement WordPress REST API client with TypeScript interfaces and comprehensive error handling
+- Create custom property post types with Advanced Custom Fields for semantic search metadata
+- Configure WordPress for headless mode with proper CORS and authentication strategies
+- Integrate existing semantic search API (http://172.22.206.209:5001) with WordPress property data
+- Establish SWR caching patterns and optimistic updates for optimal user experience
 
-### Phase 2: API Integration (Next)
-- Connect React components to WordPress REST API
-- Implement SWR for data fetching and caching  
-- Add error handling and loading states
-- Performance optimization and code splitting
+## User Experience Target
+Users can search for Nevada County properties through the Disney-themed cottage search interface, with results combining WordPress-managed content and AI-powered semantic search. Property data is managed through WordPress admin while maintaining the magical, responsive React frontend experience.
 
-### Phase 3: Production Deployment (Future)
-- Build React application for production
-- Configure Nginx for React frontend serving
-- SSL certificate setup for full-stack deployment
-- Performance monitoring and optimization
+This addresses the core need: **Complete the headless WordPress architecture by connecting React components to WordPress content management while preserving the working semantic search functionality.**
 
-## Success Metrics
+## Architecture Overview
 
-### Functional Requirements
-- All React components render correctly with Disney theming
-- Search functionality works with live WordPress API data
-- Responsive design works across desktop, tablet, and mobile
-- Performance meets target of <2 second load times
+### Core Integration Points
+1. **React Components** (✅ Complete): Disney-themed cottage search UI with TypeScript
+2. **WordPress API** (🔄 Target): Custom post types and REST API endpoints for property data
+3. **Semantic Search** (✅ Live): AI-powered search API at http://172.22.206.209:5001
+4. **Data Flow**: React → WordPress API + Semantic Search → Unified Results
 
-### Quality Standards
-- Zero critical accessibility violations (WCAG AA compliance)
-- >80% unit test coverage for React components
-- All TypeScript compilation without errors
-- Code review approval with React and WordPress best practices
+### API Integration Strategy
+```
+React Frontend ←→ WordPress REST API ←→ Property Database
+     ↓                                        ↑
+Semantic Search API ←------ Property Embeddings
+```
 
-### Integration Validation
-- React frontend successfully consumes WordPress REST API
-- Production deployment working with SSL and monitoring
-- Search performance meets sub-2 second response time targets
-- Full user journey from search to property selection functional
+### Technical Implementation
+- **WordPress Configuration**: Headless mode, CORS setup, authentication strategy
+- **Custom Post Types**: Property listings with metadata fields for semantic search
+- **API Client**: TypeScript interfaces with SWR for efficient data fetching
+- **Error Handling**: Comprehensive error boundaries and fallback strategies
+- **Performance**: Caching, optimistic updates, and loading state management
+
+## Implementation Plan Reference
+This branch executes the strategic implementation plans:
+- **Headless WordPress Integration**: `memory-bank/implementation_plan_headless_wordpress.md`
+- **Semantic Search Optimization**: `memory-bank/implementation_plan_semantic_search_optimization.md`
+
+## Prerequisites ✅
+- **React Foundation Complete**: Disney cottage search components with TypeScript and custom hooks
+- **Semantic Search API Live**: 458 Nevada County properties at http://172.22.206.209:5001 (sub-millisecond performance)
+- **Docker Infrastructure Ready**: WordPress container with MCP integration and browser automation
+- **Production Configuration**: SSL, security headers, and environment management system
+
+## Validation Criteria
+- [ ] WordPress custom post types created and REST API enabled for property listings
+- [ ] React components successfully fetch and display WordPress property data via SWR
+- [ ] Semantic search API results combined with WordPress metadata for enhanced search
+- [ ] Error handling and loading states provide smooth user experience
+- [ ] Performance maintains sub-2 second response times for full search workflow
+
+## Next Actions
+1. **Configure WordPress for headless operation** (CORS, authentication, API optimization)
+2. **Create property custom post types** with semantic search metadata fields
+3. **Implement WordPress REST API client** in React with TypeScript interfaces
+4. **Integrate semantic search results** with WordPress property data
+5. **Add production error handling** and performance optimization
 
 ---
 
-**Branch Status**: Active development combining React UI foundation with production infrastructure. Ready for API integration and frontend deployment phases.
+**Branch Status**: Ready to bridge React components with WordPress content management through REST API integration.

@@ -10,7 +10,6 @@
     "theme-setup": "node theme-setup.js"
   },
   "dependencies": {
-    "@browsermcp/mcp": "^0.1.3",
     "playwright": "^1.40.0"
   },
   "devDependencies": {
