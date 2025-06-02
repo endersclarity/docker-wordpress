@@ -77,7 +77,7 @@ export default function SearchContainer({
             onChange={updateQuery}
             onSubmit={performSearch}
             isLoading={searchState.isLoading}
-            placeholder="Describe your dream cottage... (e.g., 'cozy cabin by the creek' or 'rustic mountain retreat')"
+            placeholder="Try magical searches... (e.g., 'fish monger', 'wizard tower', 'dragon lair', or 'hobbit hole')"
             className="mb-4"
           />
 
@@ -106,12 +106,24 @@ export default function SearchContainer({
                 </h2>
                 <div className="results-count text-gray-600 dark:text-gray-400">
                   Found {searchState.total} magical properties
+                  {searchState.searchTime && (
+                    <span className="ml-2 text-green-600 dark:text-green-400">
+                      (in {searchState.searchTime}s)
+                    </span>
+                  )}
                   {searchState.apiStatus === 'fallback' && (
                     <span className="ml-2 text-amber-600 dark:text-amber-400">
                       (Using demo data - API unavailable)
                     </span>
                   )}
                 </div>
+                {searchState.expandedQuery && searchState.expandedQuery !== searchState.query && (
+                  <div className="expanded-query mt-2 p-3 bg-purple-50 dark:bg-purple-900 rounded-lg">
+                    <p className="text-sm text-purple-700 dark:text-purple-300">
+                      <span className="font-semibold">🔮 Magical interpretation:</span> {searchState.expandedQuery}
+                    </p>
+                  </div>
+                )}
               </div>
             )}
 

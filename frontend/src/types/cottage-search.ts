@@ -60,6 +60,8 @@ export interface SearchState {
   hasSearched: boolean;
   total: number;
   apiStatus: 'connected' | 'fallback' | 'error';
+  expandedQuery?: string;
+  searchTime?: number;
 }
 
 export interface ModalState {

@@ -80,6 +80,9 @@ class GeminiPropertyEmbedder:
         
         print(f"Creating Gemini embeddings for {len(listings)} properties...")
         
+        # Process ALL properties for production creative search
+        print(f"PRODUCTION MODE: Processing all {len(listings)} properties for creative semantic search")
+        
         # Prepare texts for embedding
         texts = []
         for listing in listings:
@@ -168,13 +171,78 @@ class GeminiPropertyEmbedder:
         
         return dot_product / (norm1 * norm2)
     
+    def expand_creative_query(self, query: str) -> str:
+        """Expand a query with creative associations and related concepts."""
+        
+        # Creative concept mappings (matches those in data_processor.py)
+        creative_mappings = {
+            'fish_monger': 'waterfront commercial kitchen large refrigeration processing space fresh air maritime coastal living food preparation culinary workspace',
+            'blacksmith': 'workshop garage industrial metal working forge space creative studio artisan maker space anvil fire',
+            'baker': 'large kitchen commercial space early riser warmth gathering place community hub bread oven culinary',
+            'artist': 'studio space natural light creative sanctuary inspiring views open concept loft workshop gallery display',
+            'writer': 'quiet retreat library secluded office inspiring views peaceful sanctuary study den intellectual',
+            'musician': 'sound isolation studio space performance area acoustic design creative retreat recording',
+            'wizard': 'tower stone library mysterious ancient secluded magical study observatory commanding views',
+            'hobbit': 'cozy underground circular garden intimate charming earth-integrated small cottage peaceful',
+            'dragon': 'cave-like stone fortress commanding views treasure room imposing medieval lair',
+            'fairy': 'garden whimsical cottage magical flowers enchanted small-scale nature mystical',
+            'merlin': 'magical cottage rustic secluded woodsy character whimsical wise hermit enchanted',
+            'castle': 'grand stone towers majestic fortress medieval commanding royal palace',
+            'hermit': 'secluded private off-grid self-sufficient retreat solitude wilderness hideaway',
+            'entertainer': 'large kitchen open concept party space multiple living areas outdoor entertaining',
+            'chef': 'gourmet kitchen commercial appliances herb garden wine storage dining space culinary',
+            'gardener': 'greenhouse garden space potting shed growing areas nature lover sustainable',
+            'collector': 'storage space display areas organized climate control security vault-like museum',
+            'inventor': 'workshop laboratory creative space electrical capacity experimental mad scientist',
+            'sanctuary': 'peaceful private retreat healing space meditation spiritual quiet refuge',
+            'fortress': 'secure private defensive stone commanding views protected stronghold castle',
+            'laboratory': 'workshop clean lines functional experimental space modern sterile scientific',
+            'library': 'quiet studious books reading nooks scholarly intellectual cozy study',
+            'gallery': 'display space natural light open concept artistic sophisticated museum-like',
+            'theater': 'performance space dramatic entertainment stage-like acoustic design',
+            'mansion': 'grand luxury estate formal impressive wealth staff quarters palace',
+            'cottage': 'cozy small charming intimate garden peaceful quaint rustic',
+            'cabin': 'rustic woodsy cozy retreat simple natural materials log',
+            'palace': 'opulent grand formal luxury regal impressive ceremonial royal',
+            'shack': 'simple basic rustic humble authentic unpretentious charming character'
+        }
+        
+        # Convert query to lowercase for matching
+        query_lower = query.lower().strip()
+        
+        # Check for direct matches first
+        for concept, expansions in creative_mappings.items():
+            if concept.replace('_', ' ') in query_lower or concept.replace('_', '') in query_lower:
+                return f"{query} {expansions}"
+        
+        # Check for partial matches
+        for concept, expansions in creative_mappings.items():
+            concept_words = concept.replace('_', ' ').split()
+            if any(word in query_lower for word in concept_words):
+                return f"{query} {expansions}"
+        
+        # If no specific match, add general creative enhancement words
+        creative_enhancers = [
+            'lifestyle sanctuary retreat space',
+            'character charm personality soul',
+            'adventure potential transformation opportunity',
+            'dream home fantasy reality manifestation'
+        ]
+        
+        # Add a general creative enhancement
+        return f"{query} {creative_enhancers[0]}"
+    
     def search_similar_properties(self, query: str, embeddings_data: Dict[str, Any], top_k: int = 5) -> List[Dict[str, Any]]:
-        """Search for properties similar to a query."""
+        """Search for properties similar to a query with expanded creative concepts."""
         
         print(f"Searching for: '{query}'")
         
-        # Create embedding for query
-        query_embedding = self.create_embedding(query)
+        # Expand query with creative associations
+        expanded_query = self.expand_creative_query(query)
+        print(f"Expanded query: '{expanded_query}'")
+        
+        # Create embedding for expanded query
+        query_embedding = self.create_embedding(expanded_query)
         if not query_embedding:
             print("Failed to create query embedding")
             return []
@@ -227,13 +295,18 @@ def main():
     # Generate embeddings
     embeddings_data = embedder.process_enhanced_listings(enhanced_path, embeddings_path)
     
-    # Test some searches
+    # Test some searches - including abstract creative queries
     test_queries = [
+        "fish monger",
+        "wizard tower", 
+        "blacksmith forge",
+        "artist studio",
+        "hermit hideaway",
         "Merlin's shack",
-        "luxury estate with pool",
-        "cozy cottage",
-        "family home with acreage",
-        "modern contemporary"
+        "dragon lair",
+        "hobbit hole",
+        "baker's sanctuary",
+        "inventor laboratory"
     ]
     
     print("\n" + "="*80)

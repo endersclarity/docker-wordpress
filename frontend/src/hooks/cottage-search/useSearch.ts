@@ -66,24 +66,72 @@ export function useSearch({
     }));
 
     try {
-      // TODO: Replace with actual API call
-      const mockResults = await mockSearchAPI(searchQuery, searchFilters);
+      // Use real semantic search API
+      const response = await fetch('http://172.22.206.209:5002/search', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          query: searchQuery,
+          limit: 20
+        })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Search failed: ${response.statusText}`);
+      }
+
+      const data = await response.json();
+      
+      // Transform API results to match frontend format
+      const transformedResults = data.results.map((result: any) => ({
+        id: result.id.toString(),
+        title: result.address,
+        description: result.description,
+        price: result.price,
+        propertyType: result.architectural_style || 'residential',
+        location: `${result.city}, CA`,
+        bedrooms: result.bedrooms,
+        bathrooms: result.bathrooms,
+        squareFootage: result.sqft,
+        similarity: result.similarity_score,
+        images: [], // TODO: Add image support
+        expandedQuery: data.expanded_query,
+        searchTime: data.search_time
+      }));
       
       setSearchState(prev => ({
         ...prev,
-        results: mockResults.properties,
-        total: mockResults.total,
+        results: transformedResults,
+        total: data.total_results,
         isLoading: false,
         hasSearched: true,
-        apiStatus: mockResults.apiStatus,
+        apiStatus: 'connected',
+        expandedQuery: data.expanded_query,
+        searchTime: data.search_time
       }));
     } catch (error) {
-      setSearchState(prev => ({
-        ...prev,
-        isLoading: false,
-        error: error instanceof Error ? error.message : 'Search failed',
-        apiStatus: 'error',
-      }));
+      console.error('Semantic search error:', error);
+      // Fallback to mock data if API fails
+      try {
+        const mockResults = await mockSearchAPI(searchQuery, searchFilters);
+        setSearchState(prev => ({
+          ...prev,
+          results: mockResults.properties,
+          total: mockResults.total,
+          isLoading: false,
+          hasSearched: true,
+          apiStatus: 'fallback',
+        }));
+      } catch (fallbackError) {
+        setSearchState(prev => ({
+          ...prev,
+          isLoading: false,
+          error: error instanceof Error ? error.message : 'Search failed',
+          apiStatus: 'error',
+        }));
+      }
     }
   }, [searchState.query, searchState.filters]);
 
